@@ -1,21 +1,24 @@
 package com.example.secretmessage.model;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class Message {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", columnDefinition = "VARCHAR(255)")
+    private UUID id;
 	
 	@Column(nullable=false)
 	private String message;
@@ -28,18 +31,18 @@ public class Message {
 		super();
 	}
 
-	public Message(Long id, String message, LocalDateTime createdAt) {
+	public Message(UUID id, String message, LocalDateTime createdAt) {
 		super();
 		this.id = id;
 		this.message = message;
 		this.createdAt = createdAt;
 	}
 	
-	public Long getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 
