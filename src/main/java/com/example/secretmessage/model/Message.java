@@ -15,10 +15,10 @@ import org.hibernate.annotations.GenericGenerator;
 public class Message {
 
 	@Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", columnDefinition = "VARCHAR(255)")
-    private UUID id;
+	@GeneratedValue(generator = "uuid2")
+	@GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
+	@Column(name = "id", columnDefinition = "VARCHAR(255)")
+	private UUID id;
 	
 	@Column(nullable=false)
 	private String message;
