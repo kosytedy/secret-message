@@ -1,7 +1,12 @@
 package com.example.secretmessage.controller;
 
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
+
 import javax.crypto.Cipher;
+import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -9,7 +14,7 @@ import org.apache.tomcat.util.codec.binary.Base64;
 public class Crypter {
 
 	private static String key = "";
-	private static final String initVector = "fvdhggFgGHSjnhSjJHSb";
+	private static final String initVector = "fvdhggFgGHSjnhSj";
 	
 	public Crypter(String key) {
 		Crypter.key = key;
@@ -17,11 +22,19 @@ public class Crypter {
 	
 	public String encrypt(String message) {
 		try {
+				SecureRandom random = new SecureRandom();
+				byte[] salt = new byte[16];
+				random.nextBytes(salt);
+	
+				KeySpec spec = new PBEKeySpec(key.toCharArray(), salt, 65536, 256);
+				SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+				byte[] key = f.generateSecret(spec).getEncoded();
+				SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
+				
 				IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
-				SecretKeySpec sKeySpec = new SecretKeySpec(key.getBytes(), "AES");
 				
 				Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-				cipher.init(Cipher.ENCRYPT_MODE, sKeySpec, iv);
+				cipher.init(Cipher.ENCRYPT_MODE, keySpec, iv);
 				
 				byte[] encrypted = cipher.doFinal(message.getBytes());
 				
