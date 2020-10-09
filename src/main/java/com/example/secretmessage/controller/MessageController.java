@@ -31,6 +31,7 @@ public class MessageController {
 	@PostMapping("/decrypt")
 	public String decryptMessage(@RequestBody DecryptMessageRequest request) {
 		Optional<Message> message = messageRepo.findById(request.getMessageId());
+		
 		if(message.isPresent()) {
 			Message m = message.get();
 			Crypter crypter = new Crypter(request.getKey());
