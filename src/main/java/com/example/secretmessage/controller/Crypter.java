@@ -47,11 +47,19 @@ public class Crypter {
 	
 	public String decrypt(String message) {
 		try {
+			SecureRandom random = new SecureRandom();
+			byte[] salt = new byte[16];
+			random.nextBytes(salt);
+
+			KeySpec spec = new PBEKeySpec(key.toCharArray(), salt, 65536, 256);
+			SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+			byte[] key = f.generateSecret(spec).getEncoded();
+			SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
+			
 			IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
-			SecretKeySpec sKeySpec = new SecretKeySpec(key.getBytes(), "AES");
 			
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-			cipher.init(Cipher.DECRYPT_MODE, sKeySpec, iv);
+			cipher.init(Cipher.DECRYPT_MODE, keySpec, iv);
 			
 			byte[] decrypted = cipher.doFinal(Base64.decodeBase64(message));
 			
