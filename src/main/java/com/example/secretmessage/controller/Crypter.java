@@ -58,7 +58,7 @@ public class Crypter {
 			return new String(decrypted);
 				
 		} catch(Exception e){
-			return e.getMessage();
+			return "Invalid key supplied. Error message: "+e.getMessage();
 		}
 	}
 

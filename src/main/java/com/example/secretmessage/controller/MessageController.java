@@ -30,7 +30,7 @@ public class MessageController {
 	
 	@PostMapping("/decrypt")
 	public String decryptMessage(@RequestBody DecryptMessageRequest request) {
-		Optional<Message> message = messageRepo.findById(request.getMessageId());
+		Optional<Message> message = messageRepo.findFirstByMessage(request.getMessage());
 		
 		if(message.isPresent()) {
 			Message m = message.get();
@@ -38,7 +38,7 @@ public class MessageController {
 			String decryptedMessage = crypter.decrypt(m.getMessage());
 			return decryptedMessage;
 		} else {
-			return "Invalid message ID";
+			return "Invalid message";
 		}
 	}
 	

@@ -1,25 +1,23 @@
 package com.example.secretmessage.model;
 
-import java.util.UUID;
-
 public class DecryptMessageRequest {
 	
-	private UUID messageId;
+	private String message;
 	
 	private String key;
 
-	public DecryptMessageRequest(UUID messageId, String key) {
+	public DecryptMessageRequest(String message, String key) {
 		super();
-		this.messageId = messageId;
+		this.message = message;
 		this.key = key;
 	}
 
-	public UUID getMessageId() {
-		return messageId;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setMessageId(UUID messageId) {
-		this.messageId = messageId;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public String getKey() {
@@ -32,7 +30,7 @@ public class DecryptMessageRequest {
 
 	@Override
 	public String toString() {
-		return "DecryptMessageRequest [messageId=" + messageId + ", key=" + key + "]";
+		return "DecryptMessageRequest [message=" + message + ", key=" + key + "]";
 	}
 	
 	
