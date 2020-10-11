@@ -1,6 +1,5 @@
 package com.example.secretmessage.controller;
 
-import java.security.SecureRandom;
 import java.security.spec.KeySpec;
 
 import javax.crypto.Cipher;
@@ -15,6 +14,7 @@ public class Crypter {
 
 	private static String key = "";
 	private static final String initVector = "fvdhggFgGHSjnhSj";
+	private static final byte[] salt = {69, 121, 101, 45, 62, 118, 101, 114, 61, 101, 98};
 	
 	public Crypter(String key) {
 		Crypter.key = key;
@@ -22,10 +22,6 @@ public class Crypter {
 	
 	public String encrypt(String message) {
 		try {
-			SecureRandom random = new SecureRandom();
-			byte[] salt = new byte[16];
-			random.nextBytes(salt);
-
 			KeySpec spec = new PBEKeySpec(key.toCharArray(), salt, 65536, 256);
 			SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 			byte[] key = f.generateSecret(spec).getEncoded();
@@ -47,10 +43,6 @@ public class Crypter {
 	
 	public String decrypt(String message) {
 		try {
-			SecureRandom random = new SecureRandom();
-			byte[] salt = new byte[16];
-			random.nextBytes(salt);
-
 			KeySpec spec = new PBEKeySpec(key.toCharArray(), salt, 65536, 256);
 			SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 			byte[] key = f.generateSecret(spec).getEncoded();
