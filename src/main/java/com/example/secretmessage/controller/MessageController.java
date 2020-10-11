@@ -1,8 +1,12 @@
 package com.example.secretmessage.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +15,8 @@ import com.example.secretmessage.model.Message;
 import com.example.secretmessage.model.DecryptMessageRequest;
 import com.example.secretmessage.model.EncryptMessageRequest;
 import com.example.secretmessage.repository.MessageRepository;
+
+import net.minidev.json.JSONObject;
 
 @RestController
 public class MessageController {
@@ -29,16 +35,20 @@ public class MessageController {
 	}
 	
 	@PostMapping("/decrypt")
-	public String decryptMessage(@RequestBody DecryptMessageRequest request) {
+	public ResponseEntity<?> decryptMessage(@RequestBody DecryptMessageRequest request) {
 		Optional<Message> message = messageRepo.findFirstByMessage(request.getMessage());
-		
+		JSONObject body = new JSONObject();
 		if(message.isPresent()) {
 			Message m = message.get();
 			Crypter crypter = new Crypter(request.getKey());
 			String decryptedMessage = crypter.decrypt(m.getMessage());
-			return decryptedMessage;
+			
+			body.put("decryptedMessage", decryptedMessage);
+			return ResponseEntity.ok(body);
 		} else {
-			return "Invalid message";
+			Map<String, String> errors = new HashMap<String,String>();
+			errors.put("error", "Invalid message.");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
 		}
 	}
 	
