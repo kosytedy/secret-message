@@ -5,7 +5,7 @@ This software helps to encrypt and decrypt text using a user-provided key. It is
 ## Encryption
 
 ```
-curl -d '{"rawMessage":"Here is my secret message", "key":"secret"}' -H "Content-Type: application/json" -X POST http://localhost:8080/encrypt
+$ curl -d '{"rawMessage":"Here is my secret message", "key":"secret"}' -H "Content-Type: application/json" -X POST http://127.0.0.1:8080/encrypt
 
 {
 	"id": "9518e76a-c6d8-4d2e-be9e-04521effa816",
@@ -17,7 +17,7 @@ curl -d '{"rawMessage":"Here is my secret message", "key":"secret"}' -H "Content
 ## Decryption
 
 ```
-curl -d '{"message":"UW+ftEIufIK2h6X/x9iK5Q==", "key":"secret"}' -H "Content-Type: application/json" -X POST http://localhost:8080/decrypt
+$ curl -d '{"message":"UW+ftEIufIK2h6X/x9iK5Q==", "key":"secret"}' -H "Content-Type: application/json" -X POST http://127.0.0.1:8080/decrypt
 
 {
 	"decryptedMessage": "Here is my secret message",
